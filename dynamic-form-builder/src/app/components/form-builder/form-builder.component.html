@@ -1,0 +1,31 @@
+<div class="container">
+    <h2>Form Builder</h2>
+  
+    <label>Form Name:</label>
+    <input type="text" [(ngModel)]="formName"/>
+    
+    <div *ngFor="let question of questions(); let i = index" class="question-card">
+      <label>Question Type:</label>
+      <strong>{{ question.type }}</strong>
+  
+      <label>Question Label:</label>
+      <input type="text" [value]="question.label" (input)="updateLabel(i,$event)" />
+  
+      <div *ngIf="question.type === 'radio' || question.type === 'checkbox'">
+        <label>Options:</label>
+        <div *ngFor="let option of question.options; let j = index">
+          <input *ngIf="question.options" type="text" [value]="question.options[j].value" [(ngModel)]="question.options[j].value"/>
+        </div>
+        <button (click)="addOption(i)">+ Add Option</button>
+      </div>
+  
+      <button (click)="removeQuestion(i)">Remove Question</button>
+    </div>
+  
+    <button (click)="addQuestion('text')">+ Text</button>
+    <button (click)="addQuestion('radio')">+ Radio</button>
+    <button (click)="addQuestion('checkbox')">+ Checkbox</button>
+  
+    <button (click)="submitForm()">Save Form</button>
+</div>
+  
