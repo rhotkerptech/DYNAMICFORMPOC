@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\build\DynamicFormAPI.props" />
-</Project>
