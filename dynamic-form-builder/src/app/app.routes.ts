@@ -3,6 +3,7 @@ import { FormBuilderComponent } from './components/form-builder/form-builder.com
 import { FormRendererComponent } from './components/form-renderer/form-renderer.component';
 
 export const routes: Routes = [
+    { path: '', redirectTo: 'form-builder', pathMatch: 'full' },
     {path:'form-builder', component: FormBuilderComponent},
     {path:'form-generator/:id', component: FormRendererComponent}
 ];

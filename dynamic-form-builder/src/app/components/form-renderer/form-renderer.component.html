@@ -2,29 +2,41 @@
     <h2>{{ formSchema()?.name }}</h2>
   
     <form [formGroup]="formGroup" (ngSubmit)="submitForm()">
-      <div *ngFor="let question of formSchema()?.questions">
-        <label>{{ question.label }}</label>
-  
+      <div *ngFor="let question of formSchema()?.questions">  
         <ng-container [ngSwitch]="question.type">
-          <input *ngSwitchCase="'text'" type="text" [formControlName]="question.label" />
-          
+          <mat-form-field *ngSwitchCase="'text'" class="InputText">
+            <mat-label>{{ question.label }}</mat-label>
+            <input type="text" placeholder="Enter your name" matInput [formControlName]="question.label"/>
+          </mat-form-field>
           <div *ngSwitchCase="'radio'">
-            <label *ngFor="let option of question.options">
-              <input type="radio" [formControlName]="question.label" [value]="option.value" />
-              {{ option.value}}
-            </label>
+            <mat-radio-group [formControlName]="question.label">
+              <mat-radio-button *ngFor="let option of question.options" [value]="option.value">
+                {{ option.value }}
+              </mat-radio-button>
+            </mat-radio-group>
+            <!-- <mat-form-field *ngFor="let option of question.options">
+              <mat-label>
+                {{option.value}}
+              </mat-label>
+              <input type="radio" [formControlName]="question.label" [value]="option.value" matInput/>
+            </mat-form-field> -->
           </div>
   
-          <div *ngSwitchCase="'checkbox'">
-            <label *ngFor="let option of question.options">
-              <input type="checkbox" [formControlName]="question.label" [value]="option.value" />
-              {{ option.value}}
-            </label>
+          <div *ngSwitchCase="'checkbox'" [formGroupName]="question.label">
+            <mat-checkbox *ngFor="let option of question.options" [formControlName]="option.value">
+              {{option.value}}
+            </mat-checkbox>
+            <!-- <mat-form-field *ngFor="let option of question.options">
+              <mat-label>
+                {{option.value}}
+              </mat-label>
+              <input type="checkbox" [formControlName]="option.value" [value]="option.value" matInput/>
+            </mat-form-field> -->
           </div>
         </ng-container>
       </div>
   
-      <button type="submit">Submit</button>
+      <button type="submit" mat-raised-button>Submit</button>
     </form>
   </div>
 

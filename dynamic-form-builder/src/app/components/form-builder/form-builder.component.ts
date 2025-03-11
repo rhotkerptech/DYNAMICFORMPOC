@@ -2,7 +2,8 @@ import { Component, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, FormArray, FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-
+import {MatButtonModule} from '@angular/material/button';
+import {MatInputModule} from '@angular/material/input';
 export interface Option
 {
   value: string;
@@ -10,7 +11,7 @@ export interface Option
 @Component({
   selector: 'app-form-builder',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule,FormsModule],
+  imports: [CommonModule, ReactiveFormsModule,FormsModule,MatButtonModule,MatInputModule],
   templateUrl: './form-builder.component.html',
   styleUrls: ['./form-builder.component.css']
 })
@@ -66,6 +67,7 @@ export class FormBuilderComponent {
     };
     console.log('Form Data:', formSchema);
     this.httpClient.post('http://localhost:5052/api/forms/create', Payload).subscribe((response) => {
+      alert("Form Submitted Successfully!")
       console.log('response', response);
       this.questions.set([]);
       this.formName.set('');
