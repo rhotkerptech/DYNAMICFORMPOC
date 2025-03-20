@@ -1,0 +1,84 @@
+<div class="example-container" [class.example-is-mobile]="isMobile()">
+    <mat-toolbar class="example-toolbar">
+      <button mat-icon-button (click)="snav.toggle()">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <h1 class="example-app-name">Assessment</h1>
+    </mat-toolbar>
+  
+    <mat-sidenav-container
+      class="example-sidenav-container"
+      [style.marginTop.px]="isMobile() ? 56 : 0"
+    >
+      <mat-sidenav
+        #snav
+        [mode]="isMobile() ? 'over' : 'side'"
+        [fixedInViewport]="isMobile()"
+        fixedTopGap="56"
+      >
+        <mat-nav-list>
+          @for (nav of fillerNav;let idx=$index;track idx) {
+          <a mat-list-item (click)="scrollTo(idx)">{{nav}} </a>
+          }
+        </mat-nav-list>
+      </mat-sidenav>
+  
+      <mat-sidenav-content>
+        <form>
+            @for (section of fillerContent.sections; let idx=$index; track idx) {
+                <form [formGroup]="section.formGroup" [id]="'content-' + idx">
+                    <h1>{{section.title}}</h1>
+                    @for (question of section.questions; let idx=$index; track idx) {
+                        <form>
+                            <!-- <h3>{{question.label}}</h3> -->
+                            <form>
+                                @switch (question.type) {
+                                    @case ('text') {
+                                        <mat-form-field class="InputText">
+                                            <mat-label>{{question.label}}</mat-label>
+                                            <input type="text" placeholder="Enter text" matInput />
+                                        </mat-form-field>
+                                    }
+                                    @case ('date') {
+                                        <mat-form-field class="InputText">
+                                            <mat-label>{{question.label}}</mat-label>
+                                            <input type="date" placeholder="Enter date" matInput/>
+                                        </mat-form-field>
+                                    }
+                                    @case ('radio') {
+                                        <mat-label>{{question.label}}</mat-label>
+                                        <mat-radio-group>
+                                            @for (option of question.options; let idx=$index; track idx) {
+                                                <mat-radio-button [value]="option">
+                                                    {{option}}
+                                                </mat-radio-button>
+                                            }
+                                        </mat-radio-group>
+                                    }
+                                    @case ('checkbox') {
+                                        <div>
+                                            <mat-label>{{question.label}}</mat-label>
+                                            @for (option of question.options; let idx=$index; track idx) {
+                                                <mat-checkbox>
+                                                    {{option}}
+                                                </mat-checkbox>
+                                            }
+                                        </div>
+                                    }
+                                    @case ('number') {
+                                        <mat-form-field class="InputText">
+                                            <mat-label>{{question.label}}</mat-label>
+                                            <input type="number" placeholder="Enter Number" matInput/>
+                                        </mat-form-field>
+                                    }
+                                }
+                            </form>
+                        </form>
+                    }
+                </form>
+                <hr>
+            }
+        </form>
+      </mat-sidenav-content>
+    </mat-sidenav-container>
+  </div>

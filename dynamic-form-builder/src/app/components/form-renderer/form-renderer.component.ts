@@ -64,6 +64,7 @@ export class FormRendererComponent {
       } else if (q.type === 'radio') {
         group[q.label] = new FormControl(false, Validators.required);
       }
+      
     });
     
     console.log(group)
