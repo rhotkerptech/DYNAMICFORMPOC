@@ -6,7 +6,6 @@ export interface section
   title:string;
   order:number;
   questions:question[];
-  formGroup:FormGroup;
 }
 export interface question
 {
@@ -38,7 +37,6 @@ export const data:dataSchema = {
     description: "A detailed health assessment for new patients.",
     sections: [
       {
-        formGroup:new FormGroup({}),
         sectionId: "s1",
         title: "Personal Information",
         order: 1,
@@ -65,7 +63,6 @@ export const data:dataSchema = {
         ]
       },
       {
-        formGroup:new FormGroup({}),
         sectionId: "s2",
         title: "Medical History",
         order: 2,
@@ -94,7 +91,6 @@ export const data:dataSchema = {
         ]
       },
       {
-        formGroup:new FormGroup({}),
         sectionId: "s3",
         title: "Pain Assessment",
         order: 3,
@@ -125,7 +121,6 @@ export const data:dataSchema = {
         ]
       },
       {
-        formGroup:new FormGroup({}),
         sectionId: "s4",
         title: "Mental Health Assessment",
         order: 4,

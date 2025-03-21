@@ -6,7 +6,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormField, MatFormFieldControl, MatLabel } from '@angular/material/form-field';
 import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
 import { MatCheckbox } from '@angular/material/checkbox';
@@ -33,38 +33,77 @@ import { MatInputModule } from '@angular/material/input';
   ],
 })
 export class SidenavResponsiveExample implements OnDestroy {
-  formGroups:FormGroup[]=[];
+  form:FormGroup = new FormGroup({});
   protected readonly fillerNav = Array.from(
     data.assessment.sections,
     (section):any => section.title
   );
-  protected readonly fillerContent = {
-    sections:data.assessment.sections,
-  };
-  ngOnInit() {
-    // console.log(data.assessment.sections);
-    data.assessment.sections.forEach((section: section): void => {
-      this.formGroups.push(new FormGroup({}));
-      section.questions.forEach((question): void => {
-        this.formGroups[section.order - 1].addControl(question.questionId, new FormControl(''));
-      });
-    });
-  }
-  
-  protected readonly isMobile = signal(true);
-
-  private readonly _mobileQuery: MediaQueryList;
-  private readonly _mobileQueryListener: () => void;
-
   constructor() {
     const media = inject(MediaMatcher);
-
     this._mobileQuery = media.matchMedia('(max-width: 600px)');
     this.isMobile.set(this._mobileQuery.matches);
     this._mobileQueryListener = () =>
       this.isMobile.set(this._mobileQuery.matches);
     this._mobileQuery.addEventListener('change', this._mobileQueryListener);
   }
+  protected readonly fillerContent = {
+    sections:data.assessment.sections,
+  };
+  ngOnInit() {
+    this.buildForm();
+    // console.log(data.assessment.sections);
+    // data.assessment.sections.forEach((section: section): void => {
+    //   this.formGroups.push(new FormGroup({}));
+    //   section.questions.forEach((question): void => {
+    //     this.formGroups[section.order - 1].addControl(question.questionId, new FormControl(''));
+    //   });
+    // });
+  }
+  buildForm()
+  {
+    data.assessment.sections.forEach((section: any) => {
+      section.questions.forEach((question: any) => {
+        let validators = [];
+
+        if (question.required) {
+          validators.push(Validators.required);
+        }
+        if (question.min !== undefined) {
+          validators.push(Validators.min(question.min));
+        }
+        if (question.max !== undefined) {
+          validators.push(Validators.max(question.max));
+        }
+
+        if (question.type === 'checkbox') {
+          this.form!.addControl(question.questionId,new FormGroup({}));
+          question.options.forEach((option: string) => {
+            (this.form!.get(question.questionId) as FormGroup).addControl(
+              option,
+              new FormControl(false) // Default unchecked
+            );
+          });
+        } else {
+          this.form!.addControl(question.questionId, new FormControl('', validators));
+        }
+      });
+    });
+  }
+
+  submitForm() {
+    if(this.form.invalid)
+    {
+      alert("Please fill out all required fields");
+      return;
+    }
+    console.log(this.form!.value);
+  }
+  protected readonly isMobile = signal(true);
+
+  private readonly _mobileQuery: MediaQueryList;
+  private readonly _mobileQueryListener: () => void;
+
+  
 
   ngOnDestroy(): void {
     this._mobileQuery.removeEventListener('change', this._mobileQueryListener);
