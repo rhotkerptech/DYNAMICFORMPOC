@@ -17,7 +17,15 @@
     >
       <mat-nav-list>
         @for (nav of fillerNav;let idx=$index;track idx) {
-        <a mat-list-item (click)="scrollTo(idx)">{{ nav }} </a>
+        <a mat-list-item (click)="scrollTo(idx)">{{ nav }}
+          @if(sectionStatus[nav])
+          {
+            <mat-icon color="primary">check_circle</mat-icon>
+          }
+          @else {
+            <mat-icon color="warn">check_circle</mat-icon>
+          }
+        </a>
         }
       </mat-nav-list>
     </mat-sidenav>
@@ -25,7 +33,7 @@
       <form [formGroup]="form" (ngSubmit)="submitForm()" class="Form">
         @for (section of fillerContent.sections; let idx=$index; track idx) {
         <div [id]="'content-' + idx" class="section">
-          <h5 class="section-title">&nbsp;{{ section.title }}</h5>
+          <p class="section-title">&nbsp;{{ section.title }}</p>
           @for (question of section.questions; let idx=$index; track idx) {
           <!-- <h3>{{question.label}}</h3> -->
           <div class="section-content">

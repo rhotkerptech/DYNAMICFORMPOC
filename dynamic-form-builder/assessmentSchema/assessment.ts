@@ -72,13 +72,13 @@ export const data:dataSchema = {
             label: "Do you have any allergies?",
             type: "checkbox",
             options: ["Peanuts", "Shellfish", "Dairy", "Pollen", "Other"],
-            required: false
+            required: true
           },
           {
             questionId: "q5",
             label: "Please specify any other allergies.",
             type: "text",
-            required: false,
+            required: true,
             dependsOn: "q4"
           },
           {
@@ -86,7 +86,7 @@ export const data:dataSchema = {
             label: "Do you have a history of chronic illnesses?",
             type: "checkbox",
             options: ["Diabetes", "Hypertension", "Asthma", "Heart Disease", "None"],
-            required: false
+            required: true
           }
         ]
       },
@@ -101,21 +101,21 @@ export const data:dataSchema = {
             type: "number",
             min: 1,
             max: 10,
-            required: false
+            required: true
           },
           {
             questionId: "q8",
             label: "Do you experience frequent headaches?",
             type: "radio",
             options: ["Yes", "No"],
-            required: false
+            required: true
           },
           {
             questionId: "q9",
             label: "If yes, how often?",
             type: "radio",
             options: ["Daily", "Weekly", "Monthly"],
-            required: false,
+            required: true,
             dependsOn: "q8"
           }
         ]
@@ -130,7 +130,7 @@ export const data:dataSchema = {
             label: "Have you been feeling anxious or depressed recently?",
             type: "radio",
             options: ["Yes", "No"],
-            required: false
+            required: true
           },
           {
             questionId: "q11",
@@ -138,7 +138,7 @@ export const data:dataSchema = {
             type: "number",
             min: 1,
             max: 10,
-            required: false
+            required: true
           }
         ]
       }

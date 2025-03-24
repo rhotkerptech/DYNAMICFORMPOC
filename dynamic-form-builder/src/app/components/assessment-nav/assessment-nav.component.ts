@@ -34,9 +34,10 @@ import { MatInputModule } from '@angular/material/input';
 })
 export class SidenavResponsiveExample implements OnDestroy {
   form:FormGroup = new FormGroup({});
+  sectionStatus:{[key: string]: boolean} = {};
   protected readonly fillerNav = Array.from(
     data.assessment.sections,
-    (section):any => section.title
+    (section):string => section.title,
   );
   constructor() {
     const media = inject(MediaMatcher);
@@ -51,6 +52,7 @@ export class SidenavResponsiveExample implements OnDestroy {
   };
   ngOnInit() {
     this.buildForm();
+    this.listenToFormChanges();
     // console.log(data.assessment.sections);
     // data.assessment.sections.forEach((section: section): void => {
     //   this.formGroups.push(new FormGroup({}));
@@ -61,7 +63,7 @@ export class SidenavResponsiveExample implements OnDestroy {
   }
   buildForm()
   {
-    data.assessment.sections.forEach((section: any) => {
+    data.assessment.sections.forEach((section: any,index:number) => {
       section.questions.forEach((question: any) => {
         let validators = [];
 
@@ -87,9 +89,30 @@ export class SidenavResponsiveExample implements OnDestroy {
           this.form!.addControl(question.questionId, new FormControl('', validators));
         }
       });
+      this.sectionStatus[section.title] = false;
     });
   }
 
+  listenToFormChanges()
+  {
+    this.form!.valueChanges.subscribe((value) => {
+      // console.log(value);
+      for(let section of data.assessment.sections)
+      {
+        console.log(section.title,this.sectionStatus[section.title]);
+        let sectionComplete = true;
+        for(let question of section.questions)
+        {
+          if(question.required && !value[question.questionId])
+          {
+            sectionComplete = false;
+            break;
+          }
+        }
+        this.sectionStatus[section.title] = sectionComplete;
+      }
+    });
+  }
   submitForm() {
     if(this.form.invalid)
     {
